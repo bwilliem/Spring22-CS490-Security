@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SecurityTest</string>
+    <string name="permission">Permission Status</string>
+    <string name="hasPermission">All Files Permission Enabled</string>
+    <string name="noPermission">All Files Permission Not Enabled</string>
+    <string name="open_pdf">Open PDF</string>
+    <string name="add_file">Add Image</string>
+    <string name="new_file">New File</string>
+    <string name="add_pdf">Add PDF</string>
+    <string name="open_image">Open Image</string>
+</resources>
