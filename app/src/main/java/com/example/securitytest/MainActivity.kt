@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Helps with seeing the text box when keyboard used in emulator
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         val permBtn = findViewById<Button>(R.id.permissionBtn)
@@ -47,16 +48,7 @@ class MainActivity : AppCompatActivity() {
         val addName = findViewById<EditText>(R.id.newFileName)
         val openImageBtn = findViewById<Button>(R.id.openImageBtn)
 
-//        val pm = packageManager
-//        val packages = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-//
-//        for (packageInfo in packages) {
-//            Log.d("MyPackages", "Installed package :" + packageInfo.packageName)
-//            Log.d("MyPackages", "Source dir : " + packageInfo.sourceDir)
-//            Log.d("MyPackages", "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName))
-//        }
-
-
+        // All Files Access Permission prompt dialog
 //        if (Build.VERSION.SDK_INT >= 30) {
 //            val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
 //
@@ -68,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 //            )
 //        }
 
-
+        // Read External Storage Permission prompt dialog
 //        if (ActivityCompat.checkSelfPermission(
 //                this,
 //                Manifest.permission.READ_EXTERNAL_STORAGE
@@ -81,27 +73,10 @@ class MainActivity : AppCompatActivity() {
 //                    1
 //                )
 //            }
-
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_MEDIA_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED) {
-//            Log.d("MyFile", "Enter media location if")
-//            ActivityCompat.requestPermissions(
-//                this,
-//                arrayOf(
-//                    Manifest.permission.ACCESS_MEDIA_LOCATION,
-//                ),
-//                2
-//            )
-//        }
-
-//        val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
 //
-//        val verS = Build.VERSION_CODES.S
-//        Log.d("MyFile", "Version Code S: $verS")
+
+        // Manage Media Request prompt dialog
 //        if (SDK_INT >= Build.VERSION_CODES.S) {
-//            Log.d("MyFile", "Enter S part")
 //            startActivity(
 //                Intent(
 //                    Settings.ACTION_REQUEST_MANAGE_MEDIA,
@@ -109,36 +84,6 @@ class MainActivity : AppCompatActivity() {
 //                ),
 //            )
 //        }
-
-//        if (SDK_INT >= Build.VERSION_CODES.R) {
-//            if (!Environment.isExternalStorageManager()) {
-//                ActivityCompat.requestPermissions(
-//                    this, arrayOf(
-//                        Manifest.permission.READ_EXTERNAL_STORAGE,
-//                        Manifest.permission.MANAGE_EXTERNAL_STORAGE
-//                    ), 1
-//                ) //permission request code is just an int
-//            }
-//        } else {
-//            if (ActivityCompat.checkSelfPermission(
-//                    this,
-//                    Manifest.permission.READ_EXTERNAL_STORAGE
-//                ) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-//                    this,
-//                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                ) != PackageManager.PERMISSION_GRANTED
-//            ) {
-//                ActivityCompat.requestPermissions(
-//                    this,
-//                    arrayOf(
-//                        Manifest.permission.READ_EXTERNAL_STORAGE,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-//                    ),
-//                    1
-//                )
-//            }
-//        }
-
 
         permBtn.setOnClickListener {
             if (Build.VERSION.SDK_INT >= 30 && Environment.isExternalStorageManager()) {
@@ -173,9 +118,6 @@ class MainActivity : AppCompatActivity() {
                 alert.show()
                 true
             }
-
-            val ver = applicationContext.applicationInfo.targetSdkVersion;
-            Log.d("MyFile", "Target SDK: $ver")
         }
 
         pdfBtn.setOnClickListener{
@@ -247,19 +189,6 @@ class MainActivity : AppCompatActivity() {
         return fileNames
     }
 
-    @RequiresApi(Build.VERSION_CODES.R)
-    private fun deleteFile(position: Int) {
-        val thisUri = Uri.withAppendedPath(MediaStore.Images.Media.INTERNAL_CONTENT_URI, "" + (fileUris?.get(position) ?: ""))
-        Log.d("MyFile", "File to Delete $thisUri")
-        val urisToModify = ArrayList<Uri>()
-        urisToModify.add(thisUri)
-        val editPendingIntent = MediaStore.createDeleteRequest(contentResolver, urisToModify)
-
-// Launch a system prompt requesting user permission for the operation.
-//        startIntentSenderForResult(editPendingIntent.intentSender, EDIT_REQUEST_CODE,
-//            null, 0, 0, 0)
-    }
-
     private fun openFile(pickerInitialUri: Uri) {
         Log.d("MyFile", "In Open File")
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
@@ -285,12 +214,10 @@ class MainActivity : AppCompatActivity() {
         // Find all audio files on the primary external storage device.
         val imageCollection =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                Log.d("MyFile", "Enter if in addFile")
                 MediaStore.Images.Media.getContentUri(
                     MediaStore.VOLUME_EXTERNAL_PRIMARY
                 )
             } else {
-                Log.d("MyFile", "Enter else in addFile")
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             }
 
@@ -326,7 +253,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d("MyTimer", "Last Stretch took :" + ((System.nanoTime()-startTime)/1000000)+ "mS\n")
-        startTime =   System.nanoTime()
     }
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
@@ -385,26 +311,10 @@ class MainActivity : AppCompatActivity() {
         // of our text inside our PDF file.
         title.setColor(ContextCompat.getColor(this, R.color.purple_200))
 
-        // below line is used to draw text in our PDF file.
-        // the first parameter is our text, second parameter
-        // is position from start, third parameter is position from top
-        // and then we are passing our variable of paint which is title.
-//        canvas.drawText("A portal for IT professionals.", 209, 100, title)
-//        canvas.drawText("Geeks for Geeks", 209, 80, title)
-
-        // similarly we are creating another text and in this
-        // we are aligning this text to center of our PDF file.
-//        title.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL))
-//        title.setColor(ContextCompat.getColor(this, R.color.purple_200))
-//        title.setTextSize(15)
-
         // below line is used for setting
         // our text to center of PDF.
         title.setTextAlign(Paint.Align.CENTER)
         canvas.drawText("This is sample document which we have created.", 396F, 560F, title)
-
-        // after adding all attributes to our
-        // PDF file we will be finishing our page.
 
         // after adding all attributes to our
         // PDF file we will be finishing our page.
@@ -436,30 +346,6 @@ class MainActivity : AppCompatActivity() {
         } finally {
             pdfOut?.close()
         }
-
-        // below line is used to set the name of
-        // our PDF file and its path.
-//        val file = File(Environment.getExternalStorageDirectory(), filename)
-//
-//        try {
-//            // after creating a file name we will
-//            // write our PDF file to that location.
-//            pdfDocument.writeTo(FileOutputStream(file))
-//
-//            // below line is to print toast message
-//            // on completion of PDF generation.
-//            Toast.makeText(
-//                this@MainActivity,
-//                "PDF file generated successfully.",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//        } catch (e: IOException) {
-//            // below line is used
-//            // to handle error
-//            e.printStackTrace()
-//        }
-        // after storing our pdf to that
-        // location we are closing our PDF file.
         pdfDocument.close()
     }
 
@@ -467,11 +353,6 @@ class MainActivity : AppCompatActivity() {
         Log.d("MyFile", "to open $filename")
         val intent = Intent()
         intent.action = Intent.ACTION_VIEW
-//        val photoURI = FileProvider.getUriForFile(
-//            context,
-//            context.getApplicationContext().getPackageName().toString() + ".provider",
-//            createImageFile()
-//        )
         val file = File("/storage/emulated/0/Pictures/$filename")
         val uri = FileProvider.getUriForFile(
             this@MainActivity,
@@ -479,14 +360,7 @@ class MainActivity : AppCompatActivity() {
             file
         )
         intent.setDataAndType(uri, "image/*")
-//        intent.setDataAndType(Uri.fromFile(File("/storage/emulated/0/Pictures/$filename")), "image/*")
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent)
-
-        //https://stackoverflow.com/questions/38200282/android-os-fileuriexposedexception-file-storage-emulated-0-test-txt-exposed
-    }
-
-    private fun openImageOther(filename: String) {
-//        fopen()
     }
 }
